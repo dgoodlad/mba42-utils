@@ -54,28 +54,21 @@ int get_max_brightness() {
 }
 
 void set_brightness(int brightness) {
+    int min_brightness = 0,
+        max_brightness = get_max_brightness();
+    if(brightness < min_brightness) brightness = min_brightness;
+    if(brightness > max_brightness) brightness = max_brightness;
     write_int(BRIGHTNESS_FILE, brightness);
 }
 
 void inc_brightness() {
-    int brightness, max_brightness;
-
-    brightness = get_brightness();
-    max_brightness = get_max_brightness();
-
-    if(brightness < max_brightness) {
-        set_brightness(brightness + 1);
-    }
+    int brightness = get_brightness();
+    set_brightness(brightness == 0 ? 2 : brightness * 2);
 }
 
 void dec_brightness() {
-    int brightness;
-
-    brightness = get_brightness();
-
-    if(brightness > 0) {
-        set_brightness(brightness - 1);
-    }
+    int brightness = get_brightness();
+    set_brightness(brightness <= 2 ? 0 : brightness / 2);
 }
 
 void zero_brightness() {
